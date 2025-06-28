@@ -67,6 +67,23 @@
     .content ul { margin-left: 1.2em; }
     .content li { margin-bottom: 0.5em; }
     .content code { background: #f0f0f0; padding: 2px 4px; border-radius: 3px; }
+    @media print {
+      body, html {
+        background: #fff !important;
+      }
+      header, .selector, .footer {
+        display: none !important;
+      }
+      .content {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+        background: #fff !important;
+        color: #222 !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -84,12 +101,13 @@
       <option value="6">第6周：圆的面积</option>
       <option value="7">第7周：百分数（一）</option>
     </select>
+    <button id="print-btn" style="margin-left:1.5rem;padding:0.5rem 1.2rem;font-size:1rem;border-radius:6px;border:1px solid #2d8cf0;background:#2d8cf0;color:#fff;cursor:pointer;">打印本周作业</button>
   </div>
   <div class="content" id="content">
     <!-- 作业内容将显示在这里 -->
   </div>
   <div class="footer">
-    2025 五升六数学暑假作业
+     2025 五升六数学暑假作业
   </div>
   <script src="marked.min.js"></script>
   <script src="katex.min.js"></script>
@@ -130,6 +148,11 @@
 
     document.getElementById('week-select').addEventListener('change', function() {
       renderWeek(this.value);
+    });
+
+    // 打印按钮功能
+    document.getElementById('print-btn').addEventListener('click', function() {
+      window.print();
     });
 
     // 默认显示第1周
