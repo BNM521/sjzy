@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>五升六数学暑假作业</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+      background: #f7f9fa;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    header {
+      background: #2d8cf0;
+      color: #fff;
+      padding: 2rem 1rem 1rem 1rem;
+      text-align: center;
+      box-shadow: 0 2px 8px #e0e0e0;
+    }
+    h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+    }
+    .selector {
+      margin: 2rem auto 1rem auto;
+      text-align: center;
+    }
+    select {
+      font-size: 1.1rem;
+      padding: 0.5rem 1.5rem;
+      border-radius: 6px;
+      border: 1px solid #b0c4de;
+      background: #fff;
+      outline: none;
+      transition: border 0.2s;
+    }
+    select:focus {
+      border: 1.5px solid #2d8cf0;
+    }
+    .content {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px #e0e0e0;
+      padding: 2rem 2.5rem;
+      min-height: 300px;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+    .footer {
+      text-align: center;
+      color: #888;
+      font-size: 0.95rem;
+      margin: 2rem 0 1rem 0;
+    }
+    @media (max-width: 600px) {
+      .content { padding: 1rem 0.5rem; }
+      h1 { font-size: 1.3rem; }
+    }
+    .content h2, .content h3 { color: #2d8cf0; }
+    .content ul { margin-left: 1.2em; }
+    .content li { margin-bottom: 0.5em; }
+    .content code { background: #f0f0f0; padding: 2px 4px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>五升六数学暑假作业</h1>
+    <div>选择周次，查看详细作业内容</div>
+  </header>
+  <div class="selector">
+    <select id="week-select">
+      <option value="1">第1周：分数乘法（一）</option>
+      <option value="2">第2周：分数乘法（二）</option>
+      <option value="3">第3周：分数乘法（三）及整理复习</option>
+      <option value="4">第4周：位置与方向（二）</option>
+      <option value="5">第5周：圆的认识与周长</option>
+      <option value="6">第6周：圆的面积</option>
+      <option value="7">第7周：百分数（一）</option>
+    </select>
+  </div>
+  <div class="content" id="content">
+    <!-- 作业内容将显示在这里 -->
+  </div>
+  <div class="footer">
+    &copy; 2024 五升六数学暑假作业
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script>
+    const weekFiles = {
+      1: "第1周作业单.md",
+      2: "第2周作业单.md",
+      3: "第3周作业单.md",
+      4: "第4周作业单.md",
+      5: "第5周作业单.md",
+      6: "第6周作业单.md",
+      7: "第7周作业单.md"
+    };
+
+    async function renderWeek(week) {
+      const file = weekFiles[week];
+      const contentDiv = document.getElementById('content');
+      contentDiv.innerHTML = "加载中...";
+      try {
+        const resp = await fetch(file);
+        if (!resp.ok) throw new Error("文件未找到");
+        const md = await resp.text();
+        // 只取正文部分，去除开头的注释
+        const mdBody = md.replace(/^<!--[\s\S]*?-->\s*/g, '');
+        const html = marked.parse(mdBody);
+        contentDiv.innerHTML = html;
+        renderMathInElement(contentDiv, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ]
+        });
+      } catch (e) {
+        contentDiv.innerHTML = "<div style='color:#f00'>无法加载作业内容，请确保所有md文件与index.html在同一目录下。<br>错误信息：" + e.message + "</div>";
+      }
+    }
+
+    document.getElementById('week-select').addEventListener('change', function() {
+      renderWeek(this.value);
+    });
+
+    // 默认显示第1周
+    renderWeek(1);
+  </script>
+</body>
+</html>
